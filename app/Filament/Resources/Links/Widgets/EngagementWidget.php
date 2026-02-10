@@ -17,11 +17,11 @@ class EngagementWidget extends ChartWidget
     protected function getData(): array
     {
         return [
-            'labels' => ['Total Cliques', 'Cliques Únicos'],
+            'labels' => ['Qr Code', 'Outros'],
             'datasets' => [
                 [
                     'label' => 'Engagement',
-                    'data' => [$this->getTotalClicks(), $this->getUniqueClicks()],
+                    'data' => [$this->getQrCodeClicks(), $this->getDirectClicks()],
                     'backgroundColor' => ['#4A90E2', '#50E3C2'],
                 ],
             ],
@@ -33,14 +33,14 @@ class EngagementWidget extends ChartWidget
         return 'doughnut';
     }
 
-    public function getTotalClicks(): int
+    private function getDirectClicks(): int
     {
-        return $this->record->clicks()->count();
+        return $this->record->clicks()->where('qr_code', false)->count();
     }
 
-     public function getUniqueClicks(): int
-     {
-         return $this->record->clicks()->distinct('ip_address')->count('ip_address');
-     }
+    private function getQrCodeClicks(): int
+    {
+        return $this->record->clicks()->where('qr_code', true)->count();
+    }
 
 }

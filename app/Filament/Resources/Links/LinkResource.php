@@ -9,6 +9,7 @@ use App\Filament\Resources\Links\Pages\ViewLink;
 use App\Filament\Resources\Links\Schemas\LinkForm;
 use App\Filament\Resources\Links\Schemas\LinkInfolist;
 use App\Filament\Resources\Links\Tables\LinksTable;
+use App\Models\CampaignLink;
 use App\Models\Link;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -72,11 +73,20 @@ class LinkResource extends Resource
         ];
     }
 
-    public static function getRecordRouteBindingEloquentQuery(): Builder
+    public static function getEloquentQuery(): Builder
     {
-        return parent::getRecordRouteBindingEloquentQuery()
+        if (request()->route()->uri() == '_/links') {
+            return parent::getEloquentQuery()
+                ->whereDoesntHave('campaignLinks')
+                ->withoutGlobalScopes([
+                    SoftDeletingScope::class,
+                ]);
+        }
+
+        return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
     }
+
 }

@@ -22,6 +22,7 @@ class LinkTableWidget extends TableWidget
     {
         return $table
             ->query(fn (): Builder => $this->getTableQuery())
+            ->defaultPaginationPageOption(25)
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
@@ -67,6 +68,9 @@ class LinkTableWidget extends TableWidget
 
     protected function getTableQuery(): Builder|Relation|null
     {
-        return Link::query()->orderByDesc('created_at');
+        return Link::query()
+            ->whereDoesntHave('campaignLinks')
+            ->orderByDesc('created_at')
+            ->limit(100);
     }
 }

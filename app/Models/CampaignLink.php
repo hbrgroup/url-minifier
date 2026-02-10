@@ -7,26 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Click extends Model
+class CampaignLink extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'campaign_id',
         'link_id',
-        'ip_address',
-        'qr_code',
-        'user_agent',
-        'browser',
-        'platform',
-        'device',
-        'country',
-        'country_code',
-        'referrer',
-        'referrer_type',
+        'channel_id',
     ];
+
+    public function campaign(): BelongsTo
+    {
+        return $this->belongsTo(Campaign::class);
+    }
 
     public function link(): BelongsTo
     {
         return $this->belongsTo(Link::class);
+    }
+
+    public function channel(): BelongsTo
+    {
+        return $this->belongsTo(Channel::class);
     }
 }

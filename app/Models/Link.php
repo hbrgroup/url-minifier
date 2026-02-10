@@ -27,4 +27,9 @@ class Link extends Model
     {
         return $this->hasMany(Click::class);
     }
+
+    public function campaignLinks(): HasMany
+    {
+        return $this->hasMany(CampaignLink::class);
+    }
 }

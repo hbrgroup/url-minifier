@@ -17,6 +17,7 @@ class LinksTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(25)
             ->columns([
                 Tables\Columns\TextColumn::make('slug')
                     ->label('Slug')

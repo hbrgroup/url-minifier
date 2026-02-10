@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Click;
 use App\Models\Link;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -37,7 +38,11 @@ class DashboardStatsWidget extends StatsOverviewWidget
 
     private function getTotalUniqueClicks(): int
     {
-        return 0;
+        // Para obter o total de cliques únicos, podemos contar os cliques distintos por IP agrupados por link
+        return Click::query()
+            ->select('link_id', 'ip_address')
+            ->distinct()
+            ->count();
     }
 
     private function getTotalQrCodes(): int
