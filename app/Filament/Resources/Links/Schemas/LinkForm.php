@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Links\Schemas;
 
+use App\Models\Link;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Forms;
-use Illuminate\Support\Str;
 
 class LinkForm
 {
@@ -27,8 +27,7 @@ class LinkForm
                     ->live(onBlur: true)
                     ->afterStateUpdated(function (string $operation, $state, Set $set) {
                         if ($operation === 'create') {
-                            $generatedSlug = Str::random(6);
-                            $set('slug', $generatedSlug);
+                            $set('slug', Link::createSlug());
                         }
                     })
                     ->columnSpan(3),

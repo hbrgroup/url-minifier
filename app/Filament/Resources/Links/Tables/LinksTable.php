@@ -18,6 +18,7 @@ class LinksTable
     {
         return $table
             ->defaultPaginationPageOption(25)
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('slug')
                     ->label('Slug')

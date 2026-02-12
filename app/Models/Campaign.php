@@ -30,6 +30,16 @@ class Campaign extends Model
         'end_date',
     ];
 
+    public function getIsStartedAttribute(): bool
+    {
+        return $this->start_date && $this->start_date->isPast();
+    }
+
+    public function getIsEndedAttribute(): bool
+    {
+        return $this->end_date && $this->end_date->isPast();
+    }
+
     public function links(): HasMany
     {
         return $this->hasMany(CampaignLink::class);

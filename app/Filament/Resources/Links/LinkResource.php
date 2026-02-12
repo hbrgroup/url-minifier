@@ -28,7 +28,7 @@ class LinkResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedLink;
 
-    protected static string | UnitEnum | null $navigationGroup = "Links";
+    protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {
@@ -77,7 +77,7 @@ class LinkResource extends Resource
     {
         if (request()->route()->uri() == '_/links') {
             return parent::getEloquentQuery()
-                ->whereDoesntHave('campaignLinks')
+                ->where('type_of_link', 'direct')
                 ->withoutGlobalScopes([
                     SoftDeletingScope::class,
                 ]);

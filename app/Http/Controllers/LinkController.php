@@ -6,11 +6,19 @@ use App\Models\Link;
 use App\Services\IPInfoService;
 use App\Services\QrCodeService;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Jenssegers\Agent\Facades\Agent;
 
 class LinkController extends Controller
 {
 
+    /**
+     * LinkController constructor.
+     *
+     * @param IPInfoService $ipInfoService
+     * @param QrCodeService $qrCodeService
+     */
     public function __construct(
         public readonly IPInfoService $ipInfoService,
         public readonly QrCodeService $qrCodeService,
@@ -19,7 +27,13 @@ class LinkController extends Controller
 
     }
 
-    public function click(string $slug)
+    /**
+     * Handle the click on a shortened link.
+     *
+     * @param string $slug
+     * @return RedirectResponse
+     */
+    public function click(string $slug): RedirectResponse
     {
         $link = Link::where('slug', $slug)->first();
 
@@ -27,16 +41,16 @@ class LinkController extends Controller
             abort(404, 'Link not found');
         }
 
-        // Check if part of campaign
-        if ($link->campaignLinks()->exists()) {
-            $campaignLink = $link->campaignLinks()->first();
-
-            if ($campaignLink->campaign->start_date && Carbon::today()->lt($campaignLink->campaign->start_date)) {
-                abort(403, 'A campanha ainda não começou, este link ficará activo no dia ' . $campaignLink->campaign->start_date->format('d/m/Y'));
+        // Check if link is associated with a campaign and if the campaign is active
+        if ($link->type_of_link == 'campaign') {
+            if (!$link->campaignLinks()->exists()) {
+                abort(404, 'Link not found');
             }
 
-            if ($campaignLink->campaign->end_date && Carbon::today()->gt($campaignLink->campaign->end_date)) {
-                abort(403, 'A campanha já terminou, este link não está mais ativo');
+            $campaign = $link->campaignLinks()->first()->campaign;
+
+            if (!$campaign->is_started || $campaign->is_ended) {
+                abort(403, 'A campanha associada a este link não está ativa');
             }
         }
 
@@ -78,7 +92,13 @@ class LinkController extends Controller
         return response()->redirectTo($link->url);
     }
 
-    public function create_qrcode(string $slug)
+    /**
+     * Generate a QR code for the given slug.
+     *
+     * @param string $slug
+     * @return Response
+     */
+    public function create_qrcode(string $slug): Response
     {
         if (!Link::where('slug', $slug)->exists()) {
             abort(404, 'Link not found');

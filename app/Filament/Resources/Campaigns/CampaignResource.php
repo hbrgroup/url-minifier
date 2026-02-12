@@ -30,7 +30,7 @@ class CampaignResource extends Resource
 
     protected static ?string $pluralLabel = 'campanhas';
 
-    protected static string|null|\UnitEnum $navigationGroup = "Campanhas";
+    protected static ?int $navigationSort = 2;
 
 
     public static function form(Schema $schema): Schema

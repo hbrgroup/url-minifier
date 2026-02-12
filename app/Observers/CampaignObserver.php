@@ -4,9 +4,9 @@ namespace App\Observers;
 
 use App\Models\Campaign;
 use App\Models\CampaignLink;
+use App\Models\Channel;
 use App\Models\Link;
 use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
-use Illuminate\Support\Str;
 
 class CampaignObserver implements ShouldHandleEventsAfterCommit
 {
@@ -17,29 +17,7 @@ class CampaignObserver implements ShouldHandleEventsAfterCommit
     public function created(Campaign $campaign): void
     {
         foreach ($campaign->channels_id as $channelId) {
-            $created = false;
-
-            do {
-                $rnd = Str::random(6);
-                if (!Link::where('slug', $rnd)->exists()) {
-                    $created = true;
-                }
-            } while ($created === false);
-
-            $link = Link::create([
-                'slug' => $rnd,
-                'url' => $campaign->url,
-                'title' => $campaign->name,
-                'qr_code' => true,
-            ]);
-
-            if ($link) {
-                CampaignLink::create([
-                    'campaign_id' => $campaign->id,
-                    'link_id' => $link->id,
-                    'channel_id' => $channelId,
-                ]);
-            }
+            $this->createLink($campaign, $channelId);
         }
     }
 
@@ -55,29 +33,7 @@ class CampaignObserver implements ShouldHandleEventsAfterCommit
                 ->exists();
 
             if (!$channelExistsInCampaign) {
-                $created = false;
-
-                do {
-                    $rnd = Str::random(6);
-                    if (!Link::where('slug', $rnd)->exists()) {
-                        $created = true;
-                    }
-                } while ($created === false);
-
-                $link = Link::create([
-                    'slug' => $rnd,
-                    'url' => $campaign->url,
-                    'title' => $campaign->name,
-                    'qr_code' => true,
-                ]);
-
-                if ($link) {
-                    CampaignLink::create([
-                        'campaign_id' => $campaign->id,
-                        'link_id' => $link->id,
-                        'channel_id' => $channelId,
-                    ]);
-                }
+                $this->createLink($campaign, $channelId);
             }
         }
     }
@@ -104,5 +60,26 @@ class CampaignObserver implements ShouldHandleEventsAfterCommit
     public function forceDeleted(Campaign $campaign): void
     {
         //
+    }
+
+    private function createLink(Campaign $campaign, int $channelId): void
+    {
+        $slug = Link::createSlug();
+
+        $link = Link::create([
+            'slug'    => $slug,
+            'url'     => $campaign->url,
+            'title'   => $campaign->name,
+            'qr_code' => true,
+            'type_of_link' => 'campaign',
+        ]);
+
+        if ($link) {
+            CampaignLink::create([
+                'campaign_id' => $campaign->id,
+                'link_id'     => $link->id,
+                'channel_id'  => $channelId,
+            ]);
+        }
     }
 }

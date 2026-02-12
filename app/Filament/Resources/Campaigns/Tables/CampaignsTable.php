@@ -19,6 +19,7 @@ class CampaignsTable
     {
         return $table
             ->defaultPaginationPageOption(25)
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('name')
                     ->label('Nome da campanha')
