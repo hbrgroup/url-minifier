@@ -24,10 +24,6 @@ class LinkTableWidget extends TableWidget
             ->query(fn (): Builder => $this->getTableQuery())
             ->defaultPaginationPageOption(25)
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->sortable()
-                    ->width(60),
                 Tables\Columns\TextColumn::make('slug')
                     ->label('Link')
                     ->formatStateUsing(fn (Link $record): string => route('links.click', ['slug' => $record->slug]))

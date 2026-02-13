@@ -35,10 +35,10 @@ class ClickChartWidget extends ChartWidget
 
         $datasets = array_map(
              static function(array $points, string $label) {
-                // Cria uma cor
+                // cria uma cor
                 $color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
 
-                 // Retornar o dataset formatado para o Chart.js
+                 // retorna o dataset formatado para o Chart.js
                  return [
                      'label' => $label,
                      'data' => $points,
@@ -46,7 +46,7 @@ class ClickChartWidget extends ChartWidget
                      'backgroundColor' => $color,
                      'fill' => false,
                  ];
-             }, $datasets ?? [], array_keys($datasets),
+             }, $datasets ?? [], array_keys($datasets ?? []),
         );
 
         return [
@@ -70,15 +70,6 @@ class ClickChartWidget extends ChartWidget
                 ],
             ], 'scales' => [
                 'x' => [
-                    'type' => 'time',
-                    'time' => [
-                        'unit' => 'day',
-                        'unitStepSize' => 1,
-                        'min' => 'day',
-                        'max' => 'day',
-                        'round' => 'day',
-                        'isoWeekday' => true
-                    ],
                     'beginAtZero' => true,
                 ],
             ],

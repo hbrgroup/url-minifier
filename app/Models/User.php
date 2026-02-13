@@ -3,14 +3,18 @@
 namespace App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable  implements FilamentUser, HasAvatar, HasName
 {
     use HasFactory, Notifiable;
+
+    protected $connection = 'hr_app';
 
     /**
      * The attributes that are mass assignable.
@@ -44,6 +48,16 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->name;
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return 'https://gravatar.com/avatar/'.md5($this->email).'?s=300';
     }
 
     public function canAccessPanel(Panel $panel): bool

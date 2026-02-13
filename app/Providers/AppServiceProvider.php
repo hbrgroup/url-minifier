@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\IPInfoService;
 use App\Services\QrCodeService;
+use Filament\Support\Assets\Js;
+use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        FilamentAsset::register([
+          Js::make('google-charts-loader','https://www.gstatic.com/charts/loader.js')
+        ]);
     }
 }

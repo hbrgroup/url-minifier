@@ -5,11 +5,10 @@ namespace App\Filament\Resources\Campaigns\Pages;
 use App\Filament\Resources\Campaigns\CampaignResource;
 use App\Filament\Resources\Campaigns\Widgets\BrowserUsageWidget;
 use App\Filament\Resources\Campaigns\Widgets\ClickChartWidget;
-use App\Filament\Resources\Campaigns\Widgets\CountryWidget;
+use App\Filament\Resources\Campaigns\Widgets\CountryMapWidget;
 use App\Filament\Resources\Campaigns\Widgets\PlatformUsageWidget;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
-use Illuminate\Contracts\View\View;
 
 class ViewCampaign extends ViewRecord
 {
@@ -33,7 +32,7 @@ class ViewCampaign extends ViewRecord
             ClickChartWidget::class,
             BrowserUsageWidget::class,
             PlatformUsageWidget::class,
-            CountryWidget::class,
+            CountryMapWidget::class,
         ];
     }
 }

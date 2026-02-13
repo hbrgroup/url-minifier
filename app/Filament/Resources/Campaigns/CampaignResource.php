@@ -61,7 +61,7 @@ class CampaignResource extends Resource
             Widgets\ClickChartWidget::class,
             Widgets\BrowserUsageWidget::class,
             Widgets\PlatformUsageWidget::class,
-            Widgets\CountryWidget::class,
+            Widgets\CountryMapWidget::class,
         ];
     }
 

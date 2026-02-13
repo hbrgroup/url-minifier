@@ -10,5 +10,5 @@ Estamos a enviar-lhe este email para notificar de que o arquivo solicitado está
 </x-mail::button>
 
 Obrigado,<br>
-{{ config('app.name') }}
+{{ config('company.name') }}
 </x-mail::message>
