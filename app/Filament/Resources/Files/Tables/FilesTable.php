@@ -33,6 +33,7 @@ class FilesTable
                     ->sortable(),
                 Tables\Columns\TextColumn::make('sendTo')
                     ->label('Enviado para')
+                    ->separator(',')
                     ->badge()
                     ->searchable()
                     ->sortable()

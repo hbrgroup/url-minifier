@@ -33,7 +33,7 @@ class CampaignInfolist
                     ->label('Canais')
                     ->getStateUsing(function (Campaign $record) {
                         return array_map(function($id) {
-                            return Channel::where('id', $id)->value('name') ?? 'Desconecido';
+                            return Channel::where('id', $id)->value('name') ?? 'Sem canal';
                         }, $record->channels_id ?? []);
                     })
                     ->badge()

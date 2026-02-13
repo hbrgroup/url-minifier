@@ -59,7 +59,7 @@ class LinkResource extends Resource
             Widgets\BrowserUsageWidget::class,
             Widgets\PlatformUsageWidget::class,
             Widgets\ClickChartWidget::class,
-            Widgets\CountryWidget::class
+            Widgets\CountryMapWidget::class
         ];
     }
 

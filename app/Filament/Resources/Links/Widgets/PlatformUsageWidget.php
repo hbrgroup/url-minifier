@@ -12,7 +12,7 @@ class PlatformUsageWidget extends ChartWidget
 {
     protected static string $resource = Platform::class;
 
-    protected ?string $heading = 'Uso por Plataforma';
+    protected ?string $heading = 'Uso por plataforma';
 
     public ?Link $record = null;
 

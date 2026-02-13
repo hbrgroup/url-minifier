@@ -29,7 +29,7 @@ class FileDownloadMailable extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'HBR | Enviamos-lhe um ficheiro para download',
+            subject: config('company.name') . ' | Enviamos-lhe um ficheiro para download',
         );
     }
 

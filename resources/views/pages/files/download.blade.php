@@ -25,9 +25,15 @@
 @endsection
 
 @section('content')
+    @php
+        $totalSize = array_sum(array_column($attachments, 'size'));
+        $formattedSize = number_format($totalSize / (1024 * 1024), 2) . ' MB';
+    @endphp
 
     <div>
-        <h1 class="text-xl md:text-2xl font-bold mb-1">Os seus ficheiros estão prontos</h1>
+        <h1 class="text-xl md:text-2xl font-bold mb-1">
+            {{ count($attachments) == 1 ? 'O seu ficheiro está pronto' : 'Os seus ficheiros estão prontos'}}
+        </h1>
         <p class="text-sm text-[#616161] mb-4">Esta transferência está segura e pronta para download.</p>
     </div>
 
@@ -50,19 +56,14 @@
         @endif
         </div>
         <div class="w-full md:w-3/4">
-            <h2 class="text-md md:text-xl font-semibold mt-0 mb-2">A HBR enviou-lhe {{ count($attachments) }} ficheiros</h2>
+            <h2 class="text-md md:text-xl font-semibold mt-0 mb-2">A {{ config('company.name') }} enviou-lhe {{ count($attachments) == 1 ? 'um ficheiro' : count($attachments) . ' ficheiros' }}</h2>
             <div class="mb-2 text-sm text-[#757575]">
                 <div class="inline-flex items-center space-x-1">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
                     </svg>
 
-                    @php
-                        $totalSize = array_sum(array_column($attachments, 'size'));
-                        $formattedSize = number_format($totalSize / (1024 * 1024), 2) . ' MB';
-                    @endphp
-
-                    <span>{{ $formattedSize }}</span>&nbsp;&bull;&nbsp;{{ count($attachments) }} ficheiros
+                    <span>{{ $formattedSize }}</span>&nbsp;&bull;&nbsp;{{ count($attachments) }} {{ count($attachments) == 1 ? 'ficheiro' : 'ficheiros' }}
                 </div>
             </div>
             <div class="mb-4 text-sm font-semibold text-[#2D6FB4]">
@@ -70,7 +71,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>O link expira {{ $expires_at }}</span>
+                    <span>{{ $is_expired ? 'Este link expirou' : 'O link expira ' . $expires_at  }}</span>
                 </div>
             </div>
 
@@ -78,29 +79,29 @@
                 {{ $message }}
             </div>
 
-            <a href="/f/{{ $uuid }}/download" class="flex w-full items-center justify-center px-4 py-2 bg-[#2D6FB4] text-white rounded-lg hover:bg-[#255a8a] focus:outline-none focus:ring-2 focus:ring-[#2D6FB4] focus:ring-offset-2 shadow-sm">
-                Decarregar Ficheiros
-            </a>
+            @if (!$is_expired)
+                <a href="/f/{{ $uuid }}/download" class="flex w-full items-center justify-center px-4 py-2 bg-[#2D6FB4] text-white rounded-lg hover:bg-[#255a8a] focus:outline-none focus:ring-2 focus:ring-[#2D6FB4] focus:ring-offset-2 shadow-sm">
+                    Decarregar {{ count($attachments) == 1 ? 'ficheiro' : 'ficheiros' }}
+                </a>
+            @endif
         </div>
     </div>
+    @if (count($attachments) > 1 && !$is_expired)
     <div class="mt-4 md:mt-8">
-        <h3 class="text-sm md:text-md uppercase font-semibold mb-4 bg-[#EEEEEE] p-4 rounded-lg">Ficheiros incluídos:</h3>
+        <h3 class="text-sm md:text-md uppercase font-semibold mb-4 bg-[#EEEEEE] p-4 rounded-lg">Ficheiros incluídos</h3>
         <ul class="space-y-2">
             @foreach($attachments as $attachment)
+                @php
+                    $fileName = basename($attachment['path']);
+                    $sizeInMB = number_format($attachment['size'] / (1024 * 1024), 2);
+                @endphp
                 <li class="flex flex-row-reverse md:flex-row justify-between items-center p-3 md:p-2 border-b border-[#EEEEEE]">
                     <div class="flex flex-col space-y-1 flex-1 md:w-auto">
                         <p class="text-sm">{{ $attachment['name'] }}</p>
                         <p class="text-sm text-[#616161]">
-                            @php
-                                $sizeInMB = number_format($attachment['size'] / (1024 * 1024), 2);
-                            @endphp
                             {{ $sizeInMB }} MB
                         </p>
                     </div>
-
-                    @php
-                        $fileName = basename($attachment['path']);
-                    @endphp
 
                     <a href="/f/{{ $uuid }}/download/{{ $fileName }}" class="mr-4 md:mr-0 md:ml-4 text-[#2D6FB4] self-center" target="_blank" rel="noopener noreferrer" title="Descarregar">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -111,5 +112,5 @@
             @endforeach
         </ul>
     </div>
-
+    @endif
 @endsection

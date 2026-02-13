@@ -29,10 +29,12 @@ class FileForm
                             ->maxLength(2048),
                         FileUpload::make('attachments')
                             ->label('Anexos')
+                            ->hint('Tamanho máximo por ficheiro: 2GB.')
                             ->multiple()
                             ->storeFileNamesIn('attachment_file_names')
                             ->directory('files')
-                            ->maxSize(1024 * 1024 * 2) // 2 GB
+                            ->maxFiles(5)
+                            ->maxSize(2048 * 1000) // 2GB em KB
                             ->acceptedFileTypes([
                                 'image/*',
                                 'application/pdf',
@@ -44,13 +46,13 @@ class FileForm
                                 'application/vnd.ms-powerpoint',
                                 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
                                 'application/zip',
+                                'application/x-zip-compressed',
                                 'application/x-rar-compressed',
                                 'application/x-7z-compressed',
                                 'application/x-tar',
                             ])
                             ->downloadable()
-                            ->required()
-                            ->hint('Tamanho máximo por ficheiro: 2GB.'),
+                            ->required(),
                     ]),
             ]);
     }

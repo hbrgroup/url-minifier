@@ -27,7 +27,7 @@ class TopLinksWidget extends TableWidget
                     ->url(fn (Link $record) => LinkResource::getUrl('view', ['record' => $record]))
                     ->openUrlInNewTab(),
                 Tables\Columns\TextColumn::make('clicks_count')
-                    ->label('Clicks')
+                    ->label('Cliques')
                     ->alignEnd()
                     ->width(120),
             ]);

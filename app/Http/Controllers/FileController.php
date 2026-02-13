@@ -29,9 +29,9 @@ class FileController extends Controller
             abort(404, 'Ficheiro não encontrado');
         }
 
-        if ($file->is_expired) {
+        /* if ($file->is_expired) {
             abort(404, 'Link expirou');
-        }
+        } */
 
         $attachments = array_map(function ($attachment) use ($file) {
             return [
@@ -54,6 +54,7 @@ class FileController extends Controller
             'message'       => $file->message,
             'attachments'   => $attachments,
             'is_downloaded' => $file->is_downloaded,
+            'is_expired'    => $file->is_expired,
             'expires_at'    => $file->created_at->addDays(21)->diffForHumans(),
             'created_at'    => $file->created_at,
         ]);
@@ -94,7 +95,7 @@ class FileController extends Controller
         }, $file->attachments);
 
         if (count($attachments) == 1) {
-            return response()->download(storage_path($attachments[0]['path'], $attachments[0]['name']));
+            return response()->download($attachments[0]['path'], $attachments[0]['name']);
         } else {
             // Zip the files and return the zip file
             $zipFileName = Storage::path("files/" . $file->uuid . '.zip');
