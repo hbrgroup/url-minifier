@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\File;
-use Carbon\Carbon;
+use Jenssegers\Agent\Facades\Agent;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -34,6 +34,15 @@ class FileController extends Controller
         } */
 
         $attachments = array_map(function ($attachment) use ($file) {
+            if (!Storage::exists($attachment)) {
+                return [
+                    'name' => $file->attachment_file_names[$attachment] ?? 'Ficheiro não encontrado',
+                    'size' => 0,
+                    'path' => null,
+                    'url'  => null,
+                ];
+            }
+
             return [
                 'name' => $file->attachment_file_names[$attachment],
                 'size' => filesize(Storage::path($attachment)),
@@ -48,12 +57,15 @@ class FileController extends Controller
             $qr_code = '';
         }
 
+        $is_mobile = Agent::isMobile();
+
         return response()->view('pages.files.download', [
             'uuid'          => $file->uuid,
             'qr_code'       => $qr_code,
             'message'       => $file->message,
             'attachments'   => $attachments,
             'is_downloaded' => $file->is_downloaded,
+            'is_mobile'     => $is_mobile,
             'is_expired'    => $file->is_expired,
             'expires_at'    => $file->created_at->addDays(21)->diffForHumans(),
             'created_at'    => $file->created_at,

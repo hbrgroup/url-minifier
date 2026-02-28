@@ -7,6 +7,7 @@ use App\Filament\Resources\Files\Pages\EditFile;
 use App\Filament\Resources\Files\Pages\ListFiles;
 use App\Filament\Resources\Files\Pages\ViewFile;
 use App\Filament\Resources\Files\Schemas\FileForm;
+use App\Filament\Resources\Files\Schemas\FileInfolist;
 use App\Filament\Resources\Files\Tables\FilesTable;
 use App\Models\File;
 use BackedEnum;
@@ -39,6 +40,11 @@ class FileResource extends Resource
     public static function table(Table $table): Table
     {
         return FilesTable::configure($table);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return FileInfolist::configure($schema);
     }
 
     public static function getRelations(): array

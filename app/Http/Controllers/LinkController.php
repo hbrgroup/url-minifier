@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Link;
 use App\Services\IPInfoService;
 use App\Services\QrCodeService;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Jenssegers\Agent\Facades\Agent;

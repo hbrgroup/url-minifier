@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable  implements FilamentUser, HasAvatar, HasName
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
 {
     use HasFactory, Notifiable;
 
@@ -62,8 +62,6 @@ class User extends Authenticatable  implements FilamentUser, HasAvatar, HasName
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return str_ends_with($this->email, '@hbrgroup.pt')
-            || $this->email === 'pmcfernandes@gmail.com'
-            || $this->email === 'hbrdesign@gmail.com';
+        return str_ends_with($this->email, '@hbrgroup.pt') || $this->email === 'pmcfernandes@gmail.com';
     }
 }

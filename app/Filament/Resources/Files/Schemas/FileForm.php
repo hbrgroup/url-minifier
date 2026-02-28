@@ -30,8 +30,6 @@ class FileForm
                         FileUpload::make('attachments')
                             ->label('Anexos')
                             ->hint('Tamanho máximo por ficheiro: 2GB.')
-                            ->multiple()
-                            ->storeFileNamesIn('attachment_file_names')
                             ->directory('files')
                             ->maxFiles(5)
                             ->maxSize(2048 * 1000) // 2GB em KB
@@ -51,6 +49,8 @@ class FileForm
                                 'application/x-7z-compressed',
                                 'application/x-tar',
                             ])
+                            ->storeFileNamesIn('attachment_file_names')
+                            ->multiple()
                             ->downloadable()
                             ->required(),
                     ]),

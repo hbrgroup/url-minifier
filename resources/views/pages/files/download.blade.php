@@ -6,20 +6,17 @@
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             const imageUrls = [
-                'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1470',
-                'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1470',
-                'https://images.unsplash.com/photo-1501927023255-9063be98970c?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1470',
-                'https://images.unsplash.com/photo-1544121415-acc4ed3e785c?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1470',
-                'https://images.unsplash.com/photo-1555881400-69a2384edcd4?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1470',
-                'https://images.unsplash.com/photo-1513377888081-794d8e958972?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1470',
-                'https://images.unsplash.com/photo-1558102400-72da9fdbecae?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1470',
+                @for($i = 1; $i <= 5; $i++)
+                    @php print_r("'" . asset("images/intranet_HBR-0{$i}.jpg") . "'"); @endphp,
+                @endfor
             ];
 
             const randomImageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
             const wrapper = document.getElementById('wrapper');
             wrapper.style.backgroundImage = `url('${randomImageUrl}')`;
             wrapper.style.backgroundSize = 'cover';
-            wrapper.style.backgroundPosition = 'center';
+            wrapper.style.backgroundPosition = 'right';
+            wrapper.style.backgroundAttachment = 'fixed';
         });
     </script>
 @endsection

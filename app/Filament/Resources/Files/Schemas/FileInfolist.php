@@ -44,7 +44,16 @@ class FileInfolist
                     ->placeholder('-'),
                 AttachmentEntry::make('attachments')
                     ->getStateUsing(function (File $record) {
-                        return collect($record->attachments)->map(function ($attachment) use ($record){
+                        return collect($record->attachments)->map(function ($attachment) use ($record) {
+                            if (!Storage::exists($attachment)) {
+                                return [
+                                    'name' => $record->attachment_file_names[$attachment] ?? 'Ficheiro não encontrado',
+                                    'size' => 0,
+                                    'path' => null,
+                                    'url'  => null,
+                                ];
+                            }
+
                             return [
                                 'name' => $record->attachment_file_names[$attachment],
                                 'size' => filesize(Storage::path($attachment)),

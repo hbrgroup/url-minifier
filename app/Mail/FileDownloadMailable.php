@@ -18,7 +18,7 @@ class FileDownloadMailable extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private readonly Link $link, private readonly string $message)
+    public function __construct(private readonly Link $link, private readonly ?string $message)
     {
         //
     }
@@ -41,7 +41,7 @@ class FileDownloadMailable extends Mailable
         return new Content(
             markdown: 'mail.file-download-mailable',
             with: [
-                'message' => $this->message,
+                'message' => $this->message ?? '',
                 'link' => route('links.click', ['slug' => $this->link->slug])
             ],
         );

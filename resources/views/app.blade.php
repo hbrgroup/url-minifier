@@ -19,7 +19,7 @@
     </head>
     <body class="min-h-screen flex flex-col">
         <div id="wrapper" class="bg-cover bg-center min-h-screen flex items-start md:items-center justify-center p-4">
-            <div class="relative w-full max-w-3xl mx-auto mt-0 auto:mt-8 md:mt-0 p-6 border border-[#EEEEEE] rounded-lg shadow-lg bg-white lg:absolute lg:top-15 lg:left-15 lg:mx-0">
+            <div class="relative w-full max-w-2xl mx-auto mt-0 auto:mt-8 md:mt-0 p-6 border border-[#EEEEEE] rounded-lg shadow-lg bg-white lg:absolute lg:top-15 lg:left-15 lg:mx-0">
                 @yield('content')
             </div>
         </div>
